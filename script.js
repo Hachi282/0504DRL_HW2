@@ -84,7 +84,7 @@ class RLAgent {
             return bestActions[Math.floor(Math.random() * bestActions.length)];
         }
     }
-    
+
     getGreedyAction(r, c) {
         let maxQ = -Infinity;
         let bestAction = 0;
@@ -153,40 +153,40 @@ function initGrid() {
             const cell = document.createElement('div');
             cell.className = 'cell';
             cell.id = `cell-${r}-${c}`;
-            
+
             if (r === START_STATE.r && c === START_STATE.c) cell.classList.add('start');
             else if (r === GOAL_STATE.r && c === GOAL_STATE.c) cell.classList.add('goal');
             else if (isCliff(r, c)) cell.classList.add('cliff');
-            
+
             const arrow = document.createElement('span');
             arrow.className = 'arrow';
             arrow.id = `arrow-${r}-${c}`;
             cell.appendChild(arrow);
-            
+
             gridEl.appendChild(cell);
         }
     }
-    
+
     // Add agent dot
     const agentDot = document.createElement('div');
     agentDot.className = 'agent-dot';
     agentDot.id = 'agent-dot';
     gridEl.appendChild(agentDot);
-    
+
     updateAgentPosition(START_STATE.r, START_STATE.c);
 }
 
 function updateAgentPosition(r, c) {
     const cells = document.querySelectorAll('.cell');
     cells.forEach(cell => cell.classList.remove('has-agent'));
-    
+
     const targetCell = document.getElementById(`cell-${r}-${c}`);
     if (targetCell) {
         targetCell.classList.add('has-agent');
         const agentDot = document.getElementById('agent-dot');
         // Calculate position based on cell offset
-        agentDot.style.left = `${targetCell.offsetLeft + targetCell.offsetWidth/2 - agentDot.offsetWidth/2}px`;
-        agentDot.style.top = `${targetCell.offsetTop + targetCell.offsetHeight/2 - agentDot.offsetHeight/2}px`;
+        agentDot.style.left = `${targetCell.offsetLeft + targetCell.offsetWidth / 2 - agentDot.offsetWidth / 2}px`;
+        agentDot.style.top = `${targetCell.offsetTop + targetCell.offsetHeight / 2 - agentDot.offsetHeight / 2}px`;
     }
 }
 
@@ -195,7 +195,7 @@ function updateArrows() {
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             if (isCliff(r, c) || (r === GOAL_STATE.r && c === GOAL_STATE.c)) continue;
-            
+
             const arrowEl = document.getElementById(`arrow-${r}-${c}`);
             if (arrowEl) {
                 const bestAction = agent.getGreedyAction(r, c);
@@ -204,7 +204,7 @@ function updateArrows() {
                 for (let a of ACTIONS) {
                     if (agent.getQ(r, c, a) !== 0) hasLearned = true;
                 }
-                
+
                 arrowEl.innerText = hasLearned ? ACTION_SYMBOLS[bestAction] : '';
             }
         }
@@ -214,13 +214,13 @@ function updateArrows() {
 function resetAgent() {
     const alpha = parseFloat(alphaInput.value);
     const epsilon = parseFloat(epsilonInput.value);
-    
+
     if (currentAlgorithm === 'qlearning') {
         agent = new QLearningAgent(alpha, 1.0, epsilon);
     } else {
         agent = new SarsaAgent(alpha, 1.0, epsilon);
     }
-    
+
     env.reset();
     currentEpisode = 0;
     lastReward = 0;
@@ -239,30 +239,30 @@ async function trainEpisodes(totalEpisodes) {
     btnTrain.disabled = true;
     btnStep.disabled = true;
     btnReset.disabled = true;
-    
+
     for (let ep = 0; ep < totalEpisodes; ep++) {
         let state = env.reset();
         let action = agent.chooseAction(state.r, state.c);
         let done = false;
         let epReward = 0;
         let steps = 0;
-        
+
         while (!done && steps < 1000) {
             const { next_state, reward, done: isDone } = env.step(action);
             const next_action = agent.chooseAction(next_state.r, next_state.c);
-            
+
             agent.update(state.r, state.c, action, reward, next_state.r, next_state.c, next_action);
-            
+
             state = next_state;
             action = next_action;
             epReward += reward;
             done = isDone;
             steps++;
         }
-        
+
         currentEpisode++;
         lastReward = epReward;
-        
+
         // Update UI every 50 episodes to avoid freezing
         if (ep % 50 === 0) {
             updateStats();
@@ -270,12 +270,12 @@ async function trainEpisodes(totalEpisodes) {
             await new Promise(resolve => setTimeout(resolve, 0)); // Yield to main thread
         }
     }
-    
+
     updateStats();
     updateArrows();
     env.reset();
     updateAgentPosition(START_STATE.r, START_STATE.c);
-    
+
     btnTrain.disabled = false;
     btnStep.disabled = false;
     btnReset.disabled = false;
@@ -283,19 +283,19 @@ async function trainEpisodes(totalEpisodes) {
 
 async function singleStepDemo() {
     if (steppingInterval) return;
-    
+
     btnTrain.disabled = true;
     btnStep.disabled = true;
-    
+
     // Set epsilon to 0 for demo (Greedy)
     const oldEpsilon = agent.epsilon;
     agent.epsilon = 0;
-    
+
     let state = env.reset();
     updateAgentPosition(state.r, state.c);
     let done = false;
     let epReward = 0;
-    
+
     steppingInterval = setInterval(() => {
         if (done) {
             clearInterval(steppingInterval);
@@ -305,21 +305,21 @@ async function singleStepDemo() {
             btnStep.disabled = false;
             return;
         }
-        
+
         const action = agent.chooseAction(state.r, state.c);
         const result = env.step(action);
-        
+
         state = result.next_state;
         epReward += result.reward;
         done = result.done;
-        
+
         updateAgentPosition(state.r, state.c);
-        
+
         // If fell off cliff, show it briefly then reset to start
         if (isCliff(state.r, state.c)) {
             setTimeout(() => updateAgentPosition(START_STATE.r, START_STATE.c), 200);
         }
-        
+
     }, 200); // 200ms per step
 }
 

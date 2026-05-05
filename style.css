@@ -245,6 +245,7 @@ input[type="range"] {
     grid-template-rows: repeat(4, 1fr);
     gap: 4px;
     aspect-ratio: 12 / 4;
+    position: relative;
 }
 
 .cell {
@@ -265,8 +266,8 @@ input[type="range"] {
 
 .agent-dot {
     position: absolute;
-    width: 60%;
-    height: 60%;
+    width: 24px;
+    height: 24px;
     background: var(--agent);
     border-radius: 50%;
     box-shadow: 0 0 15px var(--agent);

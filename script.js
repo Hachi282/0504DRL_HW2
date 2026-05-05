@@ -245,8 +245,9 @@ async function trainEpisodes(totalEpisodes) {
         let action = agent.chooseAction(state.r, state.c);
         let done = false;
         let epReward = 0;
+        let steps = 0;
         
-        while (!done) {
+        while (!done && steps < 1000) {
             const { next_state, reward, done: isDone } = env.step(action);
             const next_action = agent.chooseAction(next_state.r, next_state.c);
             
@@ -255,6 +256,8 @@ async function trainEpisodes(totalEpisodes) {
             state = next_state;
             action = next_action;
             epReward += reward;
+            done = isDone;
+            steps++;
         }
         
         currentEpisode++;

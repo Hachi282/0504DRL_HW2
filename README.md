@@ -1,6 +1,13 @@
 # 強化學習作業二：Cliff Walking (Q-learning vs SARSA) 
 
-👉 **[線上互動 Demo (GitHub Pages)](https://hachi282.github.io/0504DRL_HW2/)**
+---
+
+### 🌟 專案重點連結與開發紀錄 (For Grading)
+
+- 🎮 **[線上互動 Demo (GitHub Pages)](https://hachi282.github.io/0504DRL_HW2/)**：可直接在瀏覽器視覺化執行，比較 Q-learning 與 SARSA 的策略差異。
+- 💬 **[開發過程與對話紀錄](./Comparing%20Q-learning%20and%20SARSA.md)**：老師您好，本專案完整的 AI 協作開發對話紀錄，皆已詳細整理於 [`Comparing Q-learning and SARSA.md`](./Comparing%20Q-learning%20and%20SARSA.md) 檔案中，敬請參閱。
+
+---
 
 這是一個強化學習（Reinforcement Learning）的經典作業，主要在「Cliff Walking」的環境下實作並比較兩種演算法：**Q-learning**（離策略, Off-policy）與 **SARSA**（同策略, On-policy），透過相同環境與參數設定，分析其學習行為、收斂特性以及最終策略差異。
 

@@ -11,6 +11,7 @@
 - `agents.py`：實作 `QLearningAgent` 與 `SarsaAgent`，兩者皆採用 $\epsilon$-greedy 進行探索。
 - `main.py`：主程式。負責執行訓練流程、進行多次實驗取平均以繪製平滑的學習曲線，並在終端機輸出最終策略路徑。
 - `learning_curve.png`：訓練產出的學習曲線圖檔。
+- `Comparing Q-learning and SARSA.md`：本專案的開發過程與對話紀錄。
 
 ### 執行方式
 ```bash

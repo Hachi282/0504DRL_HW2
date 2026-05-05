@@ -47,6 +47,45 @@ def print_policy(agent, env, name):
                 row_str += f" {action_symbols[best_action]} "
         print(row_str)
 
+import matplotlib.patches as patches
+
+def plot_policy(agent, env, name, filename):
+    fig, ax = plt.subplots(figsize=(12, 4))
+    ax.set_xlim(0, env.cols)
+    ax.set_ylim(0, env.rows)
+    ax.set_xticks(np.arange(env.cols + 1))
+    ax.set_yticks(np.arange(env.rows + 1))
+    ax.grid(color='k', linestyle='-', linewidth=2)
+    ax.invert_yaxis() # To make (0,0) at top-left
+    
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.tick_params(axis='both', which='both', length=0)
+    
+    action_symbols = {0: '↑', 1: '→', 2: '↓', 3: '←'}
+    
+    for i in range(env.rows):
+        for j in range(env.cols):
+            state = (i, j)
+            rect_x = j
+            rect_y = i
+            
+            if state == env.start_state:
+                ax.add_patch(patches.Rectangle((rect_x, rect_y), 1, 1, facecolor='lightblue'))
+                ax.text(rect_x + 0.5, rect_y + 0.5, 'Start', ha='center', va='center', fontsize=12, weight='bold')
+            elif state == env.goal_state:
+                ax.add_patch(patches.Rectangle((rect_x, rect_y), 1, 1, facecolor='lightgreen'))
+                ax.text(rect_x + 0.5, rect_y + 0.5, 'Goal', ha='center', va='center', fontsize=12, weight='bold')
+            elif state in env.cliff:
+                ax.add_patch(patches.Rectangle((rect_x, rect_y), 1, 1, facecolor='grey'))
+                ax.text(rect_x + 0.5, rect_y + 0.5, 'Cliff', ha='center', va='center', fontsize=12, weight='bold', color='white')
+            else:
+                best_action = max(env.action_space, key=lambda a: agent.get_q_value(state, a))
+                ax.text(rect_x + 0.5, rect_y + 0.5, action_symbols[best_action], ha='center', va='center', fontsize=20)
+                
+    plt.title(f'{name} Policy')
+    plt.savefig(filename, bbox_inches='tight')
+    plt.close()
 def main():
     runs = 50
     episodes = 500
@@ -80,6 +119,11 @@ def main():
     # Print Policies from the last run
     print_policy(q_agent, env, "Q-Learning")
     print_policy(sarsa_agent, env, "SARSA")
+    
+    # Plot Policies
+    plot_policy(q_agent, env, "Q-Learning", "q_learning_policy.png")
+    plot_policy(sarsa_agent, env, "SARSA", "sarsa_policy.png")
+    print("Policy visualizations saved as 'q_learning_policy.png' and 'sarsa_policy.png'.")
     
     # Plotting
     plt.figure(figsize=(10, 6))

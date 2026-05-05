@@ -57,22 +57,12 @@ python main.py
 經過訓練後，兩種演算法最終學習到的 Greedy Policy 路徑如下：
 
 **Q-learning 最終路徑 (貼崖走)：**
-```text
- R  R  R  D  R  R  R  R  R  R  R  D 
- D  R  R  D  D  D  R  R  D  R  R  D 
- R  R  R  R  R  R  R  R  R  R  R  D 
- S  C  C  C  C  C  C  C  C  C  C  G 
-```
+![Q-learning Policy](./q_learning_policy.png)
 - **傾向**：冒險（Risk-seeking）。
 - **分析**：Q-learning 會選擇沿著懸崖邊緣（第三排）的最短路徑。由於這條路徑所需步數最少，理論上能獲得最高的報酬（扣除最少的 -1）。
 
 **SARSA 最終路徑 (繞遠路)：**
-```text
- R  R  R  R  R  R  R  R  R  R  R  D 
- U  U  U  U  U  U  R  U  U  U  R  D 
- U  U  U  U  U  R  U  U  R  U  R  D 
- S  C  C  C  C  C  C  C  C  C  C  G 
-```
+![SARSA Policy](./sarsa_policy.png)
 - **傾向**：保守（Risk-averse）。
 - **分析**：SARSA 學習到遠離懸崖的安全路徑（從上方繞過）。因為 SARSA 是 On-policy，它會把 $\epsilon$-greedy 帶來的不確定性納入更新考量。走在懸崖邊一旦發生隨機探索，掉落的風險太高，因此它寧願多走幾步（多扣幾分）來確保絕對的安全。
 

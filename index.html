@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliff Walking RL Demo | Q-learning vs SARSA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blob blob-1"></div>
+    <div class="background-blob blob-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Cliff Walking <span>RL Demo</span></h1>
+            <p>Interactive comparison between Q-Learning (Off-policy) and SARSA (On-policy)</p>
+        </header>
+
+        <main>
+            <div class="panel controls">
+                <h2>Control Panel</h2>
+                
+                <div class="control-group">
+                    <label>Algorithm</label>
+                    <div class="radio-group">
+                        <input type="radio" id="algo-q" name="algorithm" value="qlearning" checked>
+                        <label for="algo-q">Q-Learning</label>
+                        
+                        <input type="radio" id="algo-sarsa" name="algorithm" value="sarsa">
+                        <label for="algo-sarsa">SARSA</label>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="episodes">Training Episodes: <span id="episodes-val">500</span></label>
+                    <input type="range" id="episodes" min="10" max="2000" step="10" value="500">
+                </div>
+
+                <div class="control-group">
+                    <label for="epsilon">Epsilon (Exploration): <span id="epsilon-val">0.1</span></label>
+                    <input type="range" id="epsilon" min="0" max="1" step="0.01" value="0.1">
+                </div>
+                
+                <div class="control-group">
+                    <label for="alpha">Alpha (Learning Rate): <span id="alpha-val">0.5</span></label>
+                    <input type="range" id="alpha" min="0.01" max="1" step="0.01" value="0.5">
+                </div>
+
+                <div class="actions">
+                    <button id="btn-train" class="btn primary">Train</button>
+                    <button id="btn-step" class="btn secondary">Single Step Demo</button>
+                    <button id="btn-reset" class="btn danger">Reset</button>
+                </div>
+                
+                <div class="stats">
+                    <p>Current Episode: <span id="stat-episode">0</span></p>
+                    <p>Last Episode Reward: <span id="stat-reward">0</span></p>
+                </div>
+            </div>
+
+            <div class="panel environment">
+                <h2>Environment Grid</h2>
+                <div class="legend">
+                    <div class="legend-item"><div class="box start"></div> Start</div>
+                    <div class="legend-item"><div class="box goal"></div> Goal</div>
+                    <div class="legend-item"><div class="box cliff"></div> Cliff</div>
+                    <div class="legend-item"><div class="box agent"></div> Agent</div>
+                </div>
+                <div id="grid" class="grid-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
